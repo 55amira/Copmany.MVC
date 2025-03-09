@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace Company.MVC.DAL.Data.Context
 {
-    internal class ConpanyDbContext : DbContext
+    public class CompanyDbContext : DbContext
     {
-        public ConpanyDbContext() : base()
+        public CompanyDbContext() : base()
         { 
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(assembly: Assembly.GetExecutingAssembly());    
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());    
             base.OnModelCreating(modelBuilder);
         }
 
