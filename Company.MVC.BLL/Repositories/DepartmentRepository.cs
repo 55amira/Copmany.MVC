@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace Company.MVC.BLL.Repositories
 {
-    public class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : Interface.IDepartmentRepository
     {
         private readonly CompanyDbContext _context;
 
-        public DepartmentRepository ()
+        public DepartmentRepository (CompanyDbContext context)
         {
-            _context = new CompanyDbContext (); 
+            _context = context; 
         }
         public IEnumerable<Department> GetALL()
         {

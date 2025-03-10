@@ -1,3 +1,11 @@
+using Company.MVC.BLL.Interface;
+using Company.MVC.BLL.Repositories;
+using Company.MVC.DAL.Data.Context;
+using Company.MVC.DAL.Models;
+using Copmany.MVC.PL.Controllers;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+
 namespace Copmany.MVC.PL
 {
     public class Program
@@ -8,6 +16,12 @@ namespace Copmany.MVC.PL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            builder.Services.AddDbContext<CompanyDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefultConnection"));
+            });
 
             var app = builder.Build();
 
