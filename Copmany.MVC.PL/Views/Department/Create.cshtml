@@ -1,5 +1,4 @@
-﻿
-@model CreateDepartmentDto
+﻿@model CreateDepartmentDto
 
 
 @{
@@ -7,13 +6,13 @@
 }
 
 <h1>Create Department</h1>
-<br/>
-<br/>
+<br />
+<br />
 
 <form asp-action="Create">
     <div class="my-3">
         <label asp-for="Code" class="col-form-label"></label>
-        <input asp-for="Code" class="form-control"/>
+        <input asp-for="Code" class="form-control" />
         <span asp-validation-for="Code" class="text-danger"></span>
     </div>
     <div class="my-3">
@@ -31,3 +30,4 @@
         <a asp-action="Index" class="btn btn-light">Back To List</a>
     </div>
 </form>
+

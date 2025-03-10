@@ -33,16 +33,16 @@ namespace Copmany.MVC.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var department = new Department 
+                var department = new Department
                 {
                     Name = model.Name,
                     Code = model.Code,
-                    CreateAt=model.CreateAt 
+                    CreateAt = model.CreateAt
                 };
-                var Count= _departmentRepository.Add(department);
+                var Count = _departmentRepository.Add(department);
                 if (Count > 0)
                 {
-                    return RedirectToAction(nameof (Index));
+                    return RedirectToAction(nameof(Index));
                 }
             }
             return View();
