@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Company.MVC.BLL.Repositories
 {
-    public class DepartmentRepository : Interface.IDepartmentRepository
+    public class DepartmentRepository :IDepartmentRepository
     {
         private readonly CompanyDbContext _context;
 
