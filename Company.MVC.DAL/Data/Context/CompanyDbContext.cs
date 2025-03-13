@@ -12,12 +12,12 @@ namespace Company.MVC.DAL.Data.Context
     public class CompanyDbContext : DbContext
     {
         public CompanyDbContext(DbContextOptions<CompanyDbContext> options) : base(options)
-        { 
+        {
 
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());    
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -28,7 +28,7 @@ namespace Company.MVC.DAL.Data.Context
 
         //}
 
-        public DbSet<Department>  Departments { get; set; }
-        public Assembly Assebly { get; private set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }
