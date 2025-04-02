@@ -19,7 +19,11 @@
         <label asp-for="Email" class="col-form-label"></label>
         <input asp-for="Email" class="form-control" readonly />
     </div>
-
+    <div class="my-3">
+        <label asp-for="Phone" class="col-form-label"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
     <div class="my-3">
         <label asp-for="Salary" class="col-form-label"></label>
         <input asp-for="Salary" class="form-control" readonly />

@@ -14,7 +14,7 @@ namespace Copmany.MVC.PL.Controllers
         {
             _employeeRepository = employeeRepository;
         }
-
+        
         [HttpGet]
         public IActionResult Index()
         {
@@ -32,30 +32,43 @@ namespace Copmany.MVC.PL.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreatEmployeeDto model)
         {
-            if (ModelState.IsValid)
+            Console.WriteLine("ModelState.IsValid: " + ModelState.IsValid);
+
+            if (!ModelState.IsValid)
             {
-                var employee = new Employee()
-                { 
-                    Name = model.Name,
-                    Address = model.Address,
-                    Email = model.Email,
-                    Age = model.Age,    
-                    CreateAt = model.CreateAt,
-                    IsActive = model.IsActive,
-                    IsDelete = model.IsDelete,
-                    Salary = model.Salary,
-                    Phone = model.Phone,
-                    HiringDate = model.HiringDate,
-                
-                };
-                var Count = _employeeRepository.Add(employee);
-                if (Count > 0)
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
                 {
-                    return RedirectToAction(nameof(Index));
+                    Console.WriteLine(error.ErrorMessage);
                 }
+                return View(model);
             }
-            return View();
+
+            var employee = new Employee()
+            {
+                Name = model.Name,
+                Address = model.Address,
+                Email = model.Email,
+                Age = model.Age,
+                CreateAt = model.CreateAt,
+                IsActive = model.IsActive,
+                IsDelete = model.IsDelete,
+                Salary = model.Salary,
+                Phone = model.Phone,
+                HiringDate = model.HiringDate,
+            };
+
+            var count = _employeeRepository.Add(employee);
+            if (count > 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(model);
         }
+
+
+
 
         [HttpGet]
         public IActionResult Detelis(int? Id, string viewname = "Detelis")
@@ -71,10 +84,10 @@ namespace Copmany.MVC.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? Id)
         {
-            //if (Id is null) return BadRequest("Invaild");
-            //
-            //var department = _departmentRepository.Get(Id.Value);
-            //if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
+            if (Id is null) return BadRequest("Invaild");
+            
+            var department = _employeeRepository.Get(Id.Value);
+            if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
 
             return Detelis(Id, "Edit");
 
@@ -111,7 +124,7 @@ namespace Copmany.MVC.PL.Controllers
         //        };
 
         //        if (id != department.Id) return BadRequest();
-        //        var Count = _departmentRepository.Update(department);
+        //        var Count = _employeeRepository.Update(Department);
         //        if (Count > 0)
         //        {
         //            return RedirectToAction(nameof(Index));
@@ -122,10 +135,10 @@ namespace Copmany.MVC.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? Id)
         {
-            //if (Id is null) return BadRequest("Invaild");
-            //
-            //var department = _departmentRepository.Get(Id.Value);
-            //if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
+            if (Id is null) return BadRequest("Invaild");
+            
+            var department = _employeeRepository.Get(Id.Value);
+            if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
 
             return Detelis(Id, "Delete");
         }
@@ -145,5 +158,6 @@ namespace Copmany.MVC.PL.Controllers
             }
             return View(model);
         }
+        
     }
 }
