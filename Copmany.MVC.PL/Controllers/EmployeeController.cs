@@ -86,21 +86,48 @@ namespace Copmany.MVC.PL.Controllers
         {
             if (Id is null) return BadRequest("Invaild");
             
-            var department = _employeeRepository.Get(Id.Value);
-            if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
-
-            return Detelis(Id, "Edit");
+            var employee = _employeeRepository.Get(Id.Value);
+            if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
+            var employeeDto = new CreatEmployeeDto()
+            {
+               
+                Name = employee.Name,
+                Address = employee.Address,
+                Email = employee.Email,
+                Age = employee.Age,
+                CreateAt = employee.CreateAt,
+                IsActive = employee.IsActive,
+                IsDelete = employee.IsDelete,
+                Salary = employee.Salary,
+                Phone = employee.Phone,
+                HiringDate = employee.HiringDate,
+            };
+            return View(employeeDto);
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Employee model)
+        public IActionResult Edit([FromRoute] int id, CreatEmployeeDto  model)
         {
             if (ModelState.IsValid)
             {
-                if (id != model.Id) return BadRequest();
-                var Count = _employeeRepository.Update(model);
+                //if (id != model.Id) return BadRequest();
+                var employee = new Employee()
+                {
+                    Id = id,
+                    Name = model.Name,
+                    Address = model.Address,
+                    Email = model.Email,
+                    Age = model.Age,
+                    CreateAt = model.CreateAt,
+                    IsActive = model.IsActive,
+                    IsDelete = model.IsDelete,
+                    Salary = model.Salary,
+                    Phone = model.Phone,
+                    HiringDate = model.HiringDate,
+                };
+                var Count = _employeeRepository.Update(employee);
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
