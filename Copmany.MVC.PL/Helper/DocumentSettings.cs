@@ -6,7 +6,7 @@
         {
             // string folderPath = "F:\\ASP\\EFCore\\Copmany.MVC\\Copmany.MVC.PL\\wwwroot\\files\\" + folderName;
             // var folderPath = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\" + folderName;
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), @"\wwwroot\files" ,folderName);
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), @"\wwwroot\files\" ,folderName);
             var fileName = $"{Guid.NewGuid()}{file.Name}";  
 
             var filePath = Path.Combine(folderPath, fileName);

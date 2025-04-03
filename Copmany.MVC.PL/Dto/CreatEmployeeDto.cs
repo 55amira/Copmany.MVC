@@ -23,5 +23,7 @@ namespace Copmany.MVC.PL.Dto
         public DateTime CreateAt { get; set; }
         public int? DepartmentId { get; set; }
         public Department? Department { get; set; }
+        public string? ImageName { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }

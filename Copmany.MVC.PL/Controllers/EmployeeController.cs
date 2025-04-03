@@ -3,6 +3,7 @@ using Company.MVC.BLL.Interface;
 using Company.MVC.BLL.Repositories;
 using Company.MVC.DAL.Models;
 using Copmany.MVC.PL.Dto;
+using Copmany.MVC.PL.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Copmany.MVC.PL.Controllers
@@ -60,39 +61,22 @@ namespace Copmany.MVC.PL.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(CreatEmployeeDto model)
         {
-            Console.WriteLine("ModelState.IsValid: " + ModelState.IsValid);
-
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(v => v.Errors);
-                foreach (var error in errors)
+                if(model.Image is not null)
                 {
-                    Console.WriteLine(error.ErrorMessage);
+                   model.ImageName= DocumentSettings.UploadFile(model.Image, "images");
                 }
-                return View(model);
-            }
 
-            //var employee = new Employee()
-            //{
-            //    Name = model.Name,
-            //    Address = model.Address,
-            //    Email = model.Email,
-            //    Age = model.Age,
-            //    CreateAt = model.CreateAt,
-            //    IsActive = model.IsActive,
-            //    IsDelete = model.IsDelete,
-            //    Salary = model.Salary,
-            //    Phone = model.Phone,
-            //    HiringDate = model.HiringDate,
-            //    DepartmentId = model.DepartmentId,
-            //};
-            var employee = _mapper.Map<Employee>(model);
-             _unitOfwork.EmployeeRepository.Add(employee);
-            var count = _unitOfwork.Complete();
-            if (count > 0)
-            {
-                TempData["Message"] = "Employee Created !!";
-                return RedirectToAction(nameof(Index));
+                var employee = _mapper.Map<Employee>(model);
+                _unitOfwork.EmployeeRepository.Add(employee);
+                var count = _unitOfwork.Complete();
+                if (count > 0)
+                {
+                    TempData["Message"] = "Employee Created !!";
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
 
             return View(model);
