@@ -23,5 +23,6 @@ namespace Company.MVC.DAL.Models
         [DisplayName("Department")]
         public int? DepartmentId { get; set; }
         public Department? Department { get; set; }
+        public string? ImageName { get; set; }
     }
 }
