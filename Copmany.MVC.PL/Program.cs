@@ -3,6 +3,7 @@ using Company.MVC.BLL.Repositories;
 using Company.MVC.DAL.Data.Context;
 using Company.MVC.DAL.Models;
 using Copmany.MVC.PL.Controllers;
+using Copmany.MVC.PL.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -23,6 +24,14 @@ namespace Copmany.MVC.PL
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefultConnection"));
             });
+
+            //builder.Services.AddScoped();
+            //builder.Services.AddTransient();
+            //builder.Services.AddSingleton();
+
+            builder.Services.AddScoped<IScopedService, ScopedService>();
+            builder.Services.AddTransient<ITransentService, TransentService>();
+            builder.Services.AddSingleton<ISengletonSerivce,SengletonService>();    
 
             var app = builder.Build();
 
