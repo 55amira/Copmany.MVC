@@ -13,5 +13,6 @@ namespace Company.MVC.DAL.Models
         public int Code { get; set; }
 
         public DateTime CreateAt { get; set; }
+        public List<Employee> Employees { get; set; }
     }
 }

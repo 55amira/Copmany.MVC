@@ -1,4 +1,5 @@
-﻿using Microsoft.Build.Framework;
+﻿using Company.MVC.DAL.Models;
+using Microsoft.Build.Framework;
 using NuGet.Protocol.Plugins;
 using System.ComponentModel.DataAnnotations;
 using RequiredAttribute = System.ComponentModel.DataAnnotations.RequiredAttribute;
@@ -20,5 +21,7 @@ namespace Copmany.MVC.PL.Dto
         public bool IsDelete { get; set; }
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
+        public int? DepartmentId { get; set; }
+        public Department? Department { get; set; }
     }
 }

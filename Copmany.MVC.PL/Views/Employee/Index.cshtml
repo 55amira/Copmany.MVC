@@ -2,6 +2,9 @@
 @model IEnumerable<Employee>
 @{
     ViewData["Title"] = "Index";
+    // ViewData["Message"] ;
+    // string? ViewDataMessage = ViewData["Message"] as string;
+    // string? ViewBagMessage = ViewBag.Message;
 }
 
 <h1>All Employee</h1>
@@ -9,6 +12,24 @@
 <br/>
 <br/>
 
+@* <div class="m-3 alert alert-danger">
+    <p>@ViewData["Message"]</p>
+</div> *@
+
+@* <div class="m-3 alert alert-danger">
+    <p>@ViewBag.Message </p>
+</div> *@
+@* 
+<div class="m-3  alert-danger ">
+    <p>@TempData["Message"]</p>
+</div> *@
+
+@if(!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    <div class="m-3  alert-danger ">
+        <p>@TempData["Message"]</p>
+    </div>
+}
 <a asp-action="Create" asp-controller="Employee" class="btn btn-primary">Create Employee</a>
 
 <br />
@@ -29,7 +50,8 @@
                 <th>IsDelete</th>
                 <th>HiringDate</th>
                 <th>CreateAt</th>
-                 <th>Details</th>
+                <th>Department</th>
+                <th>Details</th>
                 <th>Update</th>
                 <th>Delete</th>
             </tr>
@@ -41,13 +63,20 @@
                     <td>@item.Name</td>
                     <td>@item.Age</td>
                     <td>@item.Email</td>
-                     <td>@item.Address</td>
-                      <td>@item.Phone</td>
+                    <td>@item.Address</td>
+                    <td>@item.Phone</td>
                     <td>@item.Salary</td>
                     <td>@item.IsActive</td>
                     <td>@item.IsDelete</td>
                     <td>@item.HiringDate</td>
                     <td>@item.CreateAt</td>
+                    @if(item.Department is null){
+                        <td>No Department</td>
+                    }else
+                    {
+                        <td>@item.Department.Name  </td>
+                    }
+
                     <td>
                         <a asp-action="Detelis" asp-route-id="@item.Id " class="btn btn-warning">Details</a>
                     </td>

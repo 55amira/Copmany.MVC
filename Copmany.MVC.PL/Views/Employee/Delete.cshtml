@@ -1,8 +1,8 @@
-﻿
+﻿@model Employee
 @{
     ViewData["Title"] = "Delete";
 }
-@model Employee
+
 <h1>Delete Emloyee</h1>
 
 <form asp-action="Delete">
@@ -53,7 +53,7 @@
         <label asp-for="CreateAt" class="col-form-label"></label>
         <input asp-for="CreateAt" class="form-control" readonly />
     </div>
-   
+    
     <input type="submit" value="Delete" class="btn btn-danger" />
     <a asp-controller="Department" asp-action="Index" class="btn btn-light">Back To List</a>
 </form>

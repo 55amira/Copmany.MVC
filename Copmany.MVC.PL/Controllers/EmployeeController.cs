@@ -9,22 +9,31 @@ namespace Copmany.MVC.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
         
         [HttpGet]
         public IActionResult Index()
         {
             var employees = _employeeRepository.GetALL();
+
+            //ViewData["Message"] = "Hello from ViewData";
+
+            //ViewBag.Message = "Hello from ViewBag";
+
             return View(employees);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
             return View();
         }
 
@@ -56,11 +65,13 @@ namespace Copmany.MVC.PL.Controllers
                 Salary = model.Salary,
                 Phone = model.Phone,
                 HiringDate = model.HiringDate,
+                DepartmentId = model.DepartmentId,
             };
 
             var count = _employeeRepository.Add(employee);
             if (count > 0)
             {
+                TempData["Message"] = "Employee Created !!";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -84,8 +95,10 @@ namespace Copmany.MVC.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? Id)
         {
+            var departments = _departmentRepository.GetALL();
+            ViewData["departments"] = departments;
             if (Id is null) return BadRequest("Invaild");
-            
+           
             var employee = _employeeRepository.Get(Id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
             var employeeDto = new CreatEmployeeDto()
@@ -101,6 +114,7 @@ namespace Copmany.MVC.PL.Controllers
                 Salary = employee.Salary,
                 Phone = employee.Phone,
                 HiringDate = employee.HiringDate,
+                DepartmentId = employee.DepartmentId,
             };
             return View(employeeDto);
 
@@ -108,26 +122,26 @@ namespace Copmany.MVC.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, CreatEmployeeDto  model)
+        public IActionResult Edit([FromRoute] int id, Employee  model)
         {
             if (ModelState.IsValid)
             {
-                //if (id != model.Id) return BadRequest();
-                var employee = new Employee()
-                {
-                    Id = id,
-                    Name = model.Name,
-                    Address = model.Address,
-                    Email = model.Email,
-                    Age = model.Age,
-                    CreateAt = model.CreateAt,
-                    IsActive = model.IsActive,
-                    IsDelete = model.IsDelete,
-                    Salary = model.Salary,
-                    Phone = model.Phone,
-                    HiringDate = model.HiringDate,
-                };
-                var Count = _employeeRepository.Update(employee);
+                if (id != model.Id) return BadRequest();
+                //var employee = new Employee()
+                //{
+                //    Id = id,
+                //    Name = model.Name,
+                //    Address = model.Address,
+                //    Email = model.Email,
+                //    Age = model.Age,
+                //    CreateAt = model.CreateAt,
+                //    IsActive = model.IsActive,
+                //    IsDelete = model.IsDelete,
+                //    Salary = model.Salary,
+                //    Phone = model.Phone,
+                //    HiringDate = model.HiringDate,
+                //};
+                var Count = _employeeRepository.Update(model);
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
