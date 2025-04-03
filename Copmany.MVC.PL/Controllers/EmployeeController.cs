@@ -29,16 +29,16 @@ namespace Copmany.MVC.PL.Controllers
         }
         
         [HttpGet]
-        public IActionResult Index( string? SearchInput)
+        public async Task<IActionResult> Index( string? SearchInput)
         {
             IEnumerable<Employee> employees;
             if (string.IsNullOrEmpty(SearchInput))
             {
-                employees = _unitOfwork.EmployeeRepository.GetALL();
+                employees = await _unitOfwork.EmployeeRepository.GetALLAsync();
             }
             else
             {
-                employees = _unitOfwork.EmployeeRepository.GetName(SearchInput);
+                employees = await _unitOfwork.EmployeeRepository.GetNameAsync(SearchInput);
             }
             
 
@@ -50,16 +50,16 @@ namespace Copmany.MVC.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var departments = _unitOfwork.DepartmentRepository.GetALL();
+            var departments = await _unitOfwork.DepartmentRepository.GetALLAsync();
             ViewData["departments"] = departments;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CreatEmployeeDto model)
+        public async Task<IActionResult> Create(CreatEmployeeDto model)
         {
             if (ModelState.IsValid)
             {
@@ -69,8 +69,8 @@ namespace Copmany.MVC.PL.Controllers
                 }
 
                 var employee = _mapper.Map<Employee>(model);
-                _unitOfwork.EmployeeRepository.Add(employee);
-                var count = _unitOfwork.Complete();
+                await _unitOfwork.EmployeeRepository.AddAsync(employee);
+                var count = await _unitOfwork.CompleteAsync();
                 if (count > 0)
                 {
                     TempData["Message"] = "Employee Created !!";
@@ -86,24 +86,24 @@ namespace Copmany.MVC.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult Detelis(int? Id, string viewname = "Detelis")
+        public async Task<IActionResult> Detelis(int? Id, string viewname = "Detelis")
         {
             if (Id is null) return BadRequest("Invaild");
 
-            var employee = _unitOfwork.EmployeeRepository.Get(Id.Value);
+            var employee = await _unitOfwork.EmployeeRepository.GetAsync(Id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Employee With Id is Not Found {Id} " });
 
             return View(viewname, employee);
         }
 
         [HttpGet]
-        public IActionResult Edit(int? Id)
+        public async Task<IActionResult> Edit(int? Id)
         {
-            var departments = _unitOfwork.DepartmentRepository.GetALL();
+            var departments = await _unitOfwork.DepartmentRepository.GetALLAsync();
             ViewData["departments"] = departments;
             if (Id is null) return BadRequest("Invaild");
            
-            var employee = _unitOfwork.EmployeeRepository.Get(Id.Value);
+            var employee =await _unitOfwork.EmployeeRepository.GetAsync(Id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
             var employeeDto = new CreatEmployeeDto()
             {
@@ -126,27 +126,14 @@ namespace Copmany.MVC.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Employee  model)
+        public async Task<IActionResult> Edit([FromRoute] int id, Employee  model)
         {
             if (ModelState.IsValid)
             {
                 if (id != model.Id) return BadRequest();
-                //var employee = new Employee()
-                //{
-                //    Id = id,
-                //    Name = model.Name,
-                //    Address = model.Address,
-                //    Email = model.Email,
-                //    Age = model.Age,
-                //    CreateAt = model.CreateAt,
-                //    IsActive = model.IsActive,
-                //    IsDelete = model.IsDelete,
-                //    Salary = model.Salary,
-                //    Phone = model.Phone,
-                //    HiringDate = model.HiringDate,
-                //};
+                
                  _unitOfwork.EmployeeRepository.Update(model);
-                var Count = _unitOfwork.Complete();
+                var Count = await _unitOfwork.CompleteAsync();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -179,25 +166,25 @@ namespace Copmany.MVC.PL.Controllers
         //    return View(model);
         //}
         [HttpGet]
-        public IActionResult Delete(int? Id)
+        public async Task<IActionResult> Delete(int? Id)
         {
             if (Id is null) return BadRequest("Invaild");
             
-            var department = _unitOfwork.EmployeeRepository.Get(Id.Value);
+            var department = await _unitOfwork.EmployeeRepository.GetAsync(Id.Value);
             if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
 
-            return Detelis(Id, "Delete");
+            return await Detelis(Id, "Delete");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute] int id, Employee model)
+        public async Task<IActionResult> Delete([FromRoute] int id, Employee model)
         {
             if (ModelState.IsValid)
             {
                 if (id != model.Id) return BadRequest();
                 _unitOfwork.EmployeeRepository.Delete(model);
-                var Count = _unitOfwork.Complete();
+                var Count = await _unitOfwork.CompleteAsync();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));

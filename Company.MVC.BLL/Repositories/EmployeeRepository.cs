@@ -19,10 +19,10 @@ namespace Company.MVC.BLL.Repositories
             _context = context;
         }
 
-        public List<Employee> GetName(string name)
+        public async Task<List<Employee>> GetNameAsync(string name)
         {
            // return _context.Employees.Where(E => E.Name.ToLower() .Contains(name.ToLower())).ToList();
-               return _context.Employees.Include(E=> E.Department).Where(E => E.Name.ToLower().Contains(name.ToLower())).ToList();
+               return await _context.Employees.Include(E=> E.Department).Where(E => E.Name.ToLower().Contains(name.ToLower())).ToListAsync();
         }
     }
 }

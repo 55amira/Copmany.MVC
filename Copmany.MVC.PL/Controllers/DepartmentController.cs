@@ -20,9 +20,9 @@ namespace Copmany.MVC.PL.Controllers
         }
 
         [HttpGet] 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var departments = _unitOfwork.DepartmentRepository.GetALL();
+            var departments =await _unitOfwork.DepartmentRepository.GetALLAsync();
             return View(departments);
         }
 
@@ -33,7 +33,7 @@ namespace Copmany.MVC.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDto model)
+        public async Task<IActionResult> Create(CreateDepartmentDto model)
         {
             if (ModelState.IsValid)
             {
@@ -43,8 +43,8 @@ namespace Copmany.MVC.PL.Controllers
                     Code = model.Code,
                     CreateAt = model.CreateAt
                 };
-                 _unitOfwork.DepartmentRepository.Add(department);
-                var Count = _unitOfwork.Complete();
+                 await _unitOfwork.DepartmentRepository.AddAsync(department);
+                var Count = await _unitOfwork.CompleteAsync();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -54,37 +54,37 @@ namespace Copmany.MVC.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Detelis (int ? Id,string viewname = "Detelis")
+        public async Task<IActionResult> Detelis (int ? Id,string viewname = "Detelis")
         {
             if (Id is null) return BadRequest("Invaild");
 
-            var department = _unitOfwork.DepartmentRepository.Get(Id.Value);
+            var department =await _unitOfwork.DepartmentRepository.GetAsync(Id.Value);
             if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
 
             return View(viewname, department);
         }
 
         [HttpGet]
-        public IActionResult Edit (int ? Id)
+        public async Task<IActionResult> Edit (int ? Id)
         {
             //if (Id is null) return BadRequest("Invaild");
             //
             //var department = _departmentRepository.Get(Id.Value);
             //if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
 
-            return Detelis(Id,"Edit");
+            return await Detelis(Id,"Edit");
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int id, Department department)
+        public async Task<IActionResult> Edit([FromRoute] int id, Department department)
         {
             if (ModelState.IsValid)
             {
                 if (id != department.Id) return BadRequest();
                  _unitOfwork.DepartmentRepository.Update(department);
-                var Count = _unitOfwork.Complete();
+                var Count = await _unitOfwork.CompleteAsync();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -117,25 +117,25 @@ namespace Copmany.MVC.PL.Controllers
         //    return View(model);
         //}
         [HttpGet]
-        public IActionResult Delete(int? Id)
+        public async Task<IActionResult> Delete(int? Id)
         {
            //if (Id is null) return BadRequest("Invaild");
            //
            //var department = _departmentRepository.Get(Id.Value);
            //if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
 
-            return Detelis(Id, "Delete");
+            return await Detelis(Id, "Delete");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete([FromRoute] int id, Department department)
+        public async Task<IActionResult> Delete([FromRoute] int id, Department department)
         {
             if (ModelState.IsValid)
             {
                 if (id != department.Id) return BadRequest();
                  _unitOfwork.DepartmentRepository.Delete(department);
-                var Count = _unitOfwork.Complete();
+                var Count = await _unitOfwork.CompleteAsync();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));

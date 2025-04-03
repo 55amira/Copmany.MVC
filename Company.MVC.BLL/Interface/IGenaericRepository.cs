@@ -9,9 +9,9 @@ namespace Company.MVC.BLL.Interface
 {
     public interface IGenerucRepository <T> where T : BaseEntity
     {
-        IEnumerable<T> GetALL();
-        T? Get(int id);
-        void Add(T model);
+        Task<IEnumerable<T>> GetALLAsync();
+        Task<T?> GetAsync(int id);
+        Task AddAsync(T model);
         void Update(T model);
         void Delete(T model);
     }
