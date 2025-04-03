@@ -9,19 +9,22 @@ namespace Copmany.MVC.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeRepository _employeeRepository;
-        private readonly IDepartmentRepository _departmentRepository;
+        //private readonly IEmployeeRepository _employeeRepository;
+        //private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfwork _unitOfwork;
 
         public EmployeeController(
-            IEmployeeRepository employeeRepository, 
-            IDepartmentRepository departmentRepository,
-            IMapper mapper
+            //IEmployeeRepository employeeRepository, 
+            //IDepartmentRepository departmentRepository,
+            IMapper mapper,
+            IUnitOfwork unitOfwork
             )
         {
-            _employeeRepository = employeeRepository;
-            _departmentRepository = departmentRepository;
+            //_employeeRepository = employeeRepository;
+            //_departmentRepository = departmentRepository;
             _mapper = mapper;
+            _unitOfwork = unitOfwork;
         }
         
         [HttpGet]
@@ -30,11 +33,11 @@ namespace Copmany.MVC.PL.Controllers
             IEnumerable<Employee> employees;
             if (string.IsNullOrEmpty(SearchInput))
             {
-                employees = _employeeRepository.GetALL();
+                employees = _unitOfwork.EmployeeRepository.GetALL();
             }
             else
             {
-                employees = _employeeRepository.GetName(SearchInput);
+                employees = _unitOfwork.EmployeeRepository.GetName(SearchInput);
             }
             
 
@@ -48,7 +51,7 @@ namespace Copmany.MVC.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var departments = _departmentRepository.GetALL();
+            var departments = _unitOfwork.DepartmentRepository.GetALL();
             ViewData["departments"] = departments;
             return View();
         }
@@ -84,7 +87,8 @@ namespace Copmany.MVC.PL.Controllers
             //    DepartmentId = model.DepartmentId,
             //};
             var employee = _mapper.Map<Employee>(model);
-            var count = _employeeRepository.Add(employee);
+             _unitOfwork.EmployeeRepository.Add(employee);
+            var count = _unitOfwork.Complete();
             if (count > 0)
             {
                 TempData["Message"] = "Employee Created !!";
@@ -102,7 +106,7 @@ namespace Copmany.MVC.PL.Controllers
         {
             if (Id is null) return BadRequest("Invaild");
 
-            var employee = _employeeRepository.Get(Id.Value);
+            var employee = _unitOfwork.EmployeeRepository.Get(Id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Employee With Id is Not Found {Id} " });
 
             return View(viewname, employee);
@@ -111,11 +115,11 @@ namespace Copmany.MVC.PL.Controllers
         [HttpGet]
         public IActionResult Edit(int? Id)
         {
-            var departments = _departmentRepository.GetALL();
+            var departments = _unitOfwork.DepartmentRepository.GetALL();
             ViewData["departments"] = departments;
             if (Id is null) return BadRequest("Invaild");
            
-            var employee = _employeeRepository.Get(Id.Value);
+            var employee = _unitOfwork.EmployeeRepository.Get(Id.Value);
             if (employee is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
             var employeeDto = new CreatEmployeeDto()
             {
@@ -157,7 +161,8 @@ namespace Copmany.MVC.PL.Controllers
                 //    Phone = model.Phone,
                 //    HiringDate = model.HiringDate,
                 //};
-                var Count = _employeeRepository.Update(model);
+                 _unitOfwork.EmployeeRepository.Update(model);
+                var Count = _unitOfwork.Complete();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -194,7 +199,7 @@ namespace Copmany.MVC.PL.Controllers
         {
             if (Id is null) return BadRequest("Invaild");
             
-            var department = _employeeRepository.Get(Id.Value);
+            var department = _unitOfwork.EmployeeRepository.Get(Id.Value);
             if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
 
             return Detelis(Id, "Delete");
@@ -207,7 +212,8 @@ namespace Copmany.MVC.PL.Controllers
             if (ModelState.IsValid)
             {
                 if (id != model.Id) return BadRequest();
-                var Count = _employeeRepository.Delete(model);
+                _unitOfwork.EmployeeRepository.Delete(model);
+                var Count = _unitOfwork.Complete();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));

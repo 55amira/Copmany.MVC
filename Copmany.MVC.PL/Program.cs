@@ -1,3 +1,4 @@
+using Company.MVC.BLL;
 using Company.MVC.BLL.Interface;
 using Company.MVC.BLL.Repositories;
 using Company.MVC.DAL.Data.Context;
@@ -19,8 +20,9 @@ namespace Copmany.MVC.PL
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            //builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+            //builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            builder.Services.AddScoped<IUnitOfwork,UnitOfWork>();
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefultConnection"));

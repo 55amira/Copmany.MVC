@@ -1,4 +1,5 @@
-﻿using Company.MVC.BLL.Interface;
+﻿using Company.MVC.BLL;
+using Company.MVC.BLL.Interface;
 using Company.MVC.BLL.Repositories;
 using Company.MVC.DAL.Models;
 using Copmany.MVC.PL.Dto;
@@ -9,17 +10,19 @@ namespace Copmany.MVC.PL.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        //private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfwork _unitOfwork;
 
-        public DepartmentController (IDepartmentRepository departmentRepository)
+        public DepartmentController (/*\*IDepartmentRepository departmentRepository*/ IUnitOfwork unitOfwork )
         {
-            _departmentRepository = departmentRepository;
+            //_departmentRepository = departmentRepository;
+            _unitOfwork = unitOfwork;
         }
 
         [HttpGet] 
         public IActionResult Index()
         {
-            var departments = _departmentRepository.GetALL();
+            var departments = _unitOfwork.DepartmentRepository.GetALL();
             return View(departments);
         }
 
@@ -40,7 +43,8 @@ namespace Copmany.MVC.PL.Controllers
                     Code = model.Code,
                     CreateAt = model.CreateAt
                 };
-                var Count = _departmentRepository.Add(department);
+                 _unitOfwork.DepartmentRepository.Add(department);
+                var Count = _unitOfwork.Complete();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -54,7 +58,7 @@ namespace Copmany.MVC.PL.Controllers
         {
             if (Id is null) return BadRequest("Invaild");
 
-            var department = _departmentRepository.Get(Id.Value);
+            var department = _unitOfwork.DepartmentRepository.Get(Id.Value);
             if (department is null) return NotFound(new { StatusCode = 404, Message = $"Department With Id is Not Found {Id} " });
 
             return View(viewname, department);
@@ -79,7 +83,8 @@ namespace Copmany.MVC.PL.Controllers
             if (ModelState.IsValid)
             {
                 if (id != department.Id) return BadRequest();
-                var Count = _departmentRepository.Update(department);
+                 _unitOfwork.DepartmentRepository.Update(department);
+                var Count = _unitOfwork.Complete();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
@@ -129,7 +134,8 @@ namespace Copmany.MVC.PL.Controllers
             if (ModelState.IsValid)
             {
                 if (id != department.Id) return BadRequest();
-                var Count = _departmentRepository.Delete(department);
+                 _unitOfwork.DepartmentRepository.Delete(department);
+                var Count = _unitOfwork.Complete();
                 if (Count > 0)
                 {
                     return RedirectToAction(nameof(Index));
