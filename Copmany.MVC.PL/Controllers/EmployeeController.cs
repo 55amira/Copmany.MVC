@@ -1,4 +1,5 @@
-﻿using Company.MVC.BLL.Interface;
+﻿using AutoMapper;
+using Company.MVC.BLL.Interface;
 using Company.MVC.BLL.Repositories;
 using Company.MVC.DAL.Models;
 using Copmany.MVC.PL.Dto;
@@ -10,11 +11,17 @@ namespace Copmany.MVC.PL.Controllers
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IDepartmentRepository _departmentRepository;
+        private readonly IMapper _mapper;
 
-        public EmployeeController(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
+        public EmployeeController(
+            IEmployeeRepository employeeRepository, 
+            IDepartmentRepository departmentRepository,
+            IMapper mapper
+            )
         {
             _employeeRepository = employeeRepository;
             _departmentRepository = departmentRepository;
+            _mapper = mapper;
         }
         
         [HttpGet]
@@ -62,21 +69,21 @@ namespace Copmany.MVC.PL.Controllers
                 return View(model);
             }
 
-            var employee = new Employee()
-            {
-                Name = model.Name,
-                Address = model.Address,
-                Email = model.Email,
-                Age = model.Age,
-                CreateAt = model.CreateAt,
-                IsActive = model.IsActive,
-                IsDelete = model.IsDelete,
-                Salary = model.Salary,
-                Phone = model.Phone,
-                HiringDate = model.HiringDate,
-                DepartmentId = model.DepartmentId,
-            };
-
+            //var employee = new Employee()
+            //{
+            //    Name = model.Name,
+            //    Address = model.Address,
+            //    Email = model.Email,
+            //    Age = model.Age,
+            //    CreateAt = model.CreateAt,
+            //    IsActive = model.IsActive,
+            //    IsDelete = model.IsDelete,
+            //    Salary = model.Salary,
+            //    Phone = model.Phone,
+            //    HiringDate = model.HiringDate,
+            //    DepartmentId = model.DepartmentId,
+            //};
+            var employee = _mapper.Map<Employee>(model);
             var count = _employeeRepository.Add(employee);
             if (count > 0)
             {
