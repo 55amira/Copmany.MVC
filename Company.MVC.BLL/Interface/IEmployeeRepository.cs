@@ -9,5 +9,6 @@ namespace Company.MVC.BLL.Interface
 {
     public interface IEmployeeRepository : IGenerucRepository<Employee>
     {
+       List<Employee> GetName(string name);
     }
 }

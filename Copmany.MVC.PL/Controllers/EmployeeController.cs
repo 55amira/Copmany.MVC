@@ -18,9 +18,18 @@ namespace Copmany.MVC.PL.Controllers
         }
         
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index( string? SearchInput)
         {
-            var employees = _employeeRepository.GetALL();
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(SearchInput))
+            {
+                employees = _employeeRepository.GetALL();
+            }
+            else
+            {
+                employees = _employeeRepository.GetName(SearchInput);
+            }
+            
 
             //ViewData["Message"] = "Hello from ViewData";
 

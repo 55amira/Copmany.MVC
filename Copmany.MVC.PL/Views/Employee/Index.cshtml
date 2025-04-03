@@ -30,6 +30,21 @@
         <p>@TempData["Message"]</p>
     </div>
 }
+
+<form>
+   <div class="container">
+       <div class="row">
+            <div class="col-6">
+                <input placeholder="Search By Name" name="SearchInput" class="form-control" />
+            </div>
+            <div class="col-6">
+                <input type="submit" class="btn btn-success" name="Search" />
+            </div>
+       </div>
+   </div>
+</form>
+<br />
+<br />
 <a asp-action="Create" asp-controller="Employee" class="btn btn-primary">Create Employee</a>
 
 <br />
