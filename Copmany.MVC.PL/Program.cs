@@ -6,6 +6,7 @@ using Company.MVC.DAL.Models;
 using Copmany.MVC.PL.Controllers;
 using Copmany.MVC.PL.Mapping;
 using Copmany.MVC.PL.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -37,9 +38,10 @@ namespace Copmany.MVC.PL
 
             builder.Services.AddScoped<IScopedService, ScopedService>();
             builder.Services.AddTransient<ITransentService, TransentService>();
-            builder.Services.AddSingleton<ISengletonSerivce,SengletonService>();    
-
-            var app = builder.Build();
+            builder.Services.AddSingleton<ISengletonSerivce,SengletonService>();
+            builder.Services.AddIdentity<AppUser, IdentityRole>()
+                            .AddEntityFrameworkStores<CompanyDbContext>();
+           var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
