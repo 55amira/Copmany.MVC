@@ -1,0 +1,28 @@
+﻿@model SingInDto
+@{
+    ViewData["Title"] = "SingIn";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<h1>SingIn</h1>
+
+<div class="main-agileinfo">
+    <div class="agileits-top">
+        <form asp-action="SingIn">
+       
+            <input class="text email" asp-for="Email" placeholder="Email" required="">
+            <input class="text" asp-for="Password" placeholder="Password" required="">
+           
+            <div class="wthree-text">
+                <label class="anim">
+                    <input asp-for="RememberMe" class="checkbox" >
+                    <span>Remembe rMe</span>
+                </label>
+                <div class="clear"> </div>
+            </div>
+            <input type="submit" value="SIGNIn">
+        </form>
+        <p>Don't have an Account? <a asp-action="SingUp"> Creat New Account</a></p>
+    </div>
+</div>
+

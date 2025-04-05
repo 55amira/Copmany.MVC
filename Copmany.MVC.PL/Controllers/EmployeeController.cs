@@ -4,10 +4,12 @@ using Company.MVC.BLL.Repositories;
 using Company.MVC.DAL.Models;
 using Copmany.MVC.PL.Dto;
 using Copmany.MVC.PL.Helper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Copmany.MVC.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         //private readonly IEmployeeRepository _employeeRepository;

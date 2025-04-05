@@ -2,10 +2,12 @@ using System.Diagnostics;
 using System.Text;
 using Copmany.MVC.PL.Models;
 using Copmany.MVC.PL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Copmany.MVC.PL.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

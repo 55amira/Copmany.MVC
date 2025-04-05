@@ -41,6 +41,15 @@ namespace Copmany.MVC.PL
             builder.Services.AddSingleton<ISengletonSerivce,SengletonService>();
             builder.Services.AddIdentity<AppUser, IdentityRole>()
                             .AddEntityFrameworkStores<CompanyDbContext>();
+
+
+            builder.Services.ConfigureApplicationCookie(congfi =>
+            {
+
+                congfi.LoginPath = "/Account/SingIn";
+
+            });
+
            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -55,6 +64,9 @@ namespace Copmany.MVC.PL
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",

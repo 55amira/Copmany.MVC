@@ -3,11 +3,13 @@ using Company.MVC.BLL.Interface;
 using Company.MVC.BLL.Repositories;
 using Company.MVC.DAL.Models;
 using Copmany.MVC.PL.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 
 namespace Copmany.MVC.PL.Controllers
 {
+    [Authorize]
     public class DepartmentController : Controller
     {
         //private readonly IDepartmentRepository _departmentRepository;
