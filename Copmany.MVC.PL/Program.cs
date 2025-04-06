@@ -40,7 +40,8 @@ namespace Copmany.MVC.PL
             builder.Services.AddTransient<ITransentService, TransentService>();
             builder.Services.AddSingleton<ISengletonSerivce,SengletonService>();
             builder.Services.AddIdentity<AppUser, IdentityRole>()
-                            .AddEntityFrameworkStores<CompanyDbContext>();
+                            .AddEntityFrameworkStores<CompanyDbContext>()
+                            .AddDefaultTokenProviders(); 
 
 
             builder.Services.ConfigureApplicationCookie(congfi =>

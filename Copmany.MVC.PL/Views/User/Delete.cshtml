@@ -1,0 +1,29 @@
+﻿@model UserToReturnDto
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete Emloyee</h1>
+<div>
+    <div class="my-3">
+        <label asp-for="UserName" class="col-form-label"></label>
+        <input asp-for="UserName" class="form-control" readonly />
+
+    </div>
+    <div class="my-3">
+        <label asp-for="FirstName" class="col-form-label"></label>
+        <input asp-for="FirstName" class="form-control" readonly />
+    </div>
+    <div class="my-3">
+        <label asp-for="LastName" class="col-form-label"></label>
+        <input asp-for="LastName" class="form-control" readonly />
+    </div>
+    <div class="my-3">
+        <label asp-for="Email" class="col-form-label"></label>
+        <input asp-for="Email" class="form-control" />
+
+    </div>
+
+    <a asp-controller="User" asp-action="Edit" class="btn btn-warning">Edit</a>
+    <a asp-controller="User" asp-action="Index" class="btn btn-light">Back To List</a>
+</div>
